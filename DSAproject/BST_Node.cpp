@@ -1,6 +1,6 @@
 # include "BST_Node.h"
 
-BST_Node::BST_Node() : name(""), adress(""), balance(0)
+BST_Node::BST_Node() : name(""), adress("")
 {
 }
 
