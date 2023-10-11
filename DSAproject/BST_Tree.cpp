@@ -6,49 +6,62 @@ BST_Tree:: BST_Tree() {
 }
 void BST_Tree::add_Account(string name, string adress, int accountno, int password, int balance)
 {
-	h.add(accountno, password);
-	ofstream write;
-	write.open("server.txt", ios::app);
-	write << name << endl << adress << endl << accountno << endl << password << endl << balance << endl;
-	write.close();
-	BST_Node * temp = new BST_Node(name, adress, accountno, password, balance);
+    h.add(accountno, password);
+    ofstream write;
+    write.open("server.txt", ios::app);
+    write << name << endl << adress << endl << accountno << endl << password << endl << balance << endl;
+    write.close();
+    BST_Node* temp = new BST_Node(name, adress, accountno, password, balance);
 
-	BST_Node * current = Root;
-	if (Root == nullptr)
-	{
-		Root = temp;
-	}
-	else
-	{
-		while (true)
-		{
-			if (accountno < current->account_number)
-			{
-				if (current->left == nullptr)
-				{
-					current->left = temp;
-					break;
-				}
-				current = current->left;
-			}
+    BST_Node* current = Root;
+    bool inserted = false;
 
-			if (accountno > current->account_number)
-			{
-				if (current->right == nullptr)
-				{
-					current->right = temp;
-					break;
-				}
-				current = current->right;
-			}
-		}
-	}
+    if (Root == nullptr)
+    {
+        Root = temp;
+    }
+    else
+    {
+        while (current != nullptr)
+        {
+            if (accountno < current->account_number)
+            {
+                if (current->left == nullptr)
+                {
+                    current->left = temp;
+                    inserted = true;
+                    break;
+                }
+                current = current->left;
+            }
+            else if (accountno > current->account_number)
+            {
+                if (current->right == nullptr)
+                {
+                    current->right = temp;
+                    inserted = true;
+                    break;
+                }
+                current = current->right;
+            }
+            else
+            {
+                // Duplicate account number, handle accordingly (e.g., update or reject)
+                break;
+            }
+        }
+
+        if (!inserted)
+        {
+            // Handle the case where the node was not inserted
+        }
+    }
 }
+
 
 
 BST_Node* BST_Tree:: delete_Account(BST_Node * root, int accountno)
 {
-	//cout << "accountno"<<root->account_number;
 	if (root == nullptr)
 		cout << "it seems that Tree is empty OR You have entered wrong data" << endl;
 	else if (accountno < root->account_number)
@@ -154,7 +167,6 @@ void BST_Tree::editaccount_byAdmin()
 }
 void BST_Tree::transfer(int sender_accountno,int reciever_accountno,int sender_amount)
 {
-	// happening in tree
 	BST_Node *sender = search(Root, sender_accountno);
 	sender->balance = sender->balance -sender_amount;
 	BST_Node *reciever = search(Root, reciever_accountno);
@@ -261,14 +273,7 @@ void BST_Tree::load_Server()
 		read >> balance;
 		read.ignore();
 		read.ignore();
-/*
-		cout << name << endl;
-		cout << adress << endl;
-		cout << accountno << endl;
-		cout << password << endl;
-		cout << balance << endl;
-		
-		*/
+
 		if (name!="" && adress != "" && accountno != 0 && password != 0 )
 		{
 			//cout << "enter hua" << endl;
