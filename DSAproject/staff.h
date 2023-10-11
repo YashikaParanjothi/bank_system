@@ -19,11 +19,6 @@ void staff()
         cout << "press 5 to exit" << endl;
         cin >> condition;
 
-        if (condition == 1)
-        {
-            // transaction file print karani ha account search kr k
-        }
-
         if (condition == 2)
         {
             int senderaccountno = 0, amount = 0, recieveraccountno = 0;
