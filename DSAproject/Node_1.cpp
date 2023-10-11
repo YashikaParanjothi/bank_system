@@ -2,10 +2,8 @@
 
 Node_1::Node_1() : accountNumber(0), password(0)
 {
-  next = nullptr;
 }
 
 Node_1::Node_1(int a, int p) : accountNumber(a), password(p)
 {
-  next = nullptr;
 }
