@@ -21,7 +21,9 @@ void staff()
 
         if (condition == 2)
         {
-            int senderaccountno = 0, amount = 0, recieveraccountno = 0;
+            int senderaccountno = 0;
+            int amount = 0;
+            int recieveraccountno = 0;
             cout << "please enter  sender account number" << endl;
             cin >> senderaccountno;
             cout << "please enter  receiver account number" << endl;
@@ -33,7 +35,8 @@ void staff()
 
         if (condition == 3)  // withdraw
         {
-            int accountno = 0, amount = 0;
+            int accountno = 0;
+            int amount = 0;
             cout << "please enter account number" << endl;
             cin >> accountno;
             cout << "please enter amount" << endl;
@@ -43,7 +46,8 @@ void staff()
 
         if (condition == 4)
         {
-            int accountno = 0, amount = 0;
+            int accountno = 0;
+            int amount = 0;
             cout << "please enter account number" << endl;
             cin >> accountno;
             cout << "please enter amount" << endl;
