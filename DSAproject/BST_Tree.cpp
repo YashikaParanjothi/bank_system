@@ -238,10 +238,6 @@ void BST_Tree::transfer(int sender_accountno,int reciever_accountno,int sender_a
 	rename("temp.txt", "transaction.txt");
 
 }
-void BST_Tree::transaction_history()
-{
-    
-}
 void BST_Tree:: findMax(BST_Node* root)
 {
 	if (root)
@@ -280,17 +276,18 @@ bool BST_Tree::isValidAccountData(const string& name, const string& address, int
 
 void BST_Tree::insertNode(const string& name, const string& address, int accountno, int password, int balance)
 {
-    BST_Node* temp = new BST_Node(name, address, accountno, password, balance);
+    std::unique_ptr<BST_Node> temp = std::make_unique<BST_Node>(name, address, accountno, password, balance);
 
     if (Root == nullptr)
     {
-        Root = temp;
+        Root = temp.release();
     }
     else
     {
-        insertNodeRecursive(Root, temp);
+        insertNodeRecursive(Root, temp.get());
     }
 }
+
 
 void BST_Tree::insertNodeRecursive(BST_Node* current, BST_Node* newNode)
 {
