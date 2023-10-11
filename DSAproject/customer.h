@@ -19,7 +19,7 @@ void customer()
 			int accountno;
 			cout << "please enter account number" << endl;
 			cin >> accountno;
-			BST_Node* temp = t.search(t.Root, accountno);
+			const BST_Node* temp = t.search(t.Root, accountno);
 			cout << "Account Details Are :\t\t\t\t\t\t " << endl << endl;
 			cout << "NAME :" << temp->name << endl;
 			cout << "ADRESS :" << temp->adress << endl;
