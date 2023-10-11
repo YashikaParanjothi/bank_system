@@ -1,178 +1,142 @@
 # include <iostream>
-using namespace std;
+# include <fstream>
 # include "Hashtable.h"
 # include <vector>
+#include <memory>
 
-Hashtable:: Hashtable()
+using namespace std;
+
+Hashtable::Hashtable()
 {
-	start = nullptr;
+    start = nullptr;
 }
-void Hashtable:: starthash()
+
+void Hashtable::starthash()
 {
-	for (int i = 0; i < 12; i++)
-	{
-		Node * temp1 = new Node(i);
-		if (start == nullptr)
-		{
-			start = temp1;
-		}
-		else
-		{
-			Node * current = start;
-			while (current ->next != nullptr)
-			{
-				current = current->next;
-			}
-			current->next = temp1;
-		}
-	}
-	loadhashtable();
+    for (int i = 0; i < 12; i++)
+    {
+        auto temp1 = make_unique<Node>(i);
+        if (start == nullptr)
+        {
+            start = move(temp1);
+        }
+        else
+        {
+            Node* current = start.get();
+            while (current->next != nullptr)
+            {
+                current = current->next.get();
+            }
+            current->next = move(temp1);
+        }
+    }
+    loadhashtable();
 }
+
 void Hashtable::add(int a, int p)
 {
-	static int i = 0;
-	ofstream write;
-	write.open("hashtable.txt",ios::app);
-	if (i != 0)
-	{
-		write << endl;
-		write << a << endl << p;
-	}
-	else
-	{
-		i++;
-		write << a << endl << p;
-	}
-	write.close();
+    static int i = 0;
+    ofstream write;
+    write.open("hashtable.txt", ios::app);
+    if (i != 0)
+    {
+        write << endl;
+        write << a << endl << p;
+    }
+    else
+    {
+        i++;
+        write << a << endl << p;
+    }
+    write.close();
 
-	starthash();
+    starthash();
 }
+
 bool Hashtable::match(int a, int p)
 {
-	bool flag = false;
-	int r = a % 10;
-	Node * c = start;
-	while (c->data != r)
-	{
-		c = c->next;
-	}
-	Node_1 *c1 = c->pre;
-	while (c1 != nullptr)
-	{
-		if (c1->accountNumber == a && c1->password == p)
-		{
-			flag = true;
-			break;
-		}
-		c1 = c1->next;
-	}
-	return flag;
+    bool flag = false;
+    int r = a % 10;
+    Node* c = start.get();
+    while (c->data != r)
+    {
+        c = c->next.get();
+    }
+    Node_1* c1 = c->pre.get();
+    while (c1 != nullptr)
+    {
+        if (c1->accountNumber == a && c1->password == p)
+        {
+            flag = true;
+            break;
+        }
+        c1 = c1->next.get();
+    }
+    return flag;
 }
-void Hashtable:: display()
-{
-	Node * current = start;
-	while (current != nullptr)
-	{
-		cout<<current->data<<endl;
-		current = current->next;
-	}
-}
-void  Hashtable::loadhashtable()
-{
-	int acc = 0, r, pass;
 
-	ifstream read;
-	read.open("hashtable.txt");
-	while (!read.eof())
-	{
-
-		read >> acc;
-		read >> pass;
-		if (match(acc, pass))
-		{
-			continue;
-		}
-		if (acc!= -858993460 && pass!= -858993460)
-		{
-			r = acc % 10;
-
-			Node * c = start;
-			while (c->data != r)
-			{
-				c = c->next;
-			}
-			Node_1 *temp = new Node_1(acc, pass);
-			if (c->pre == nullptr)
-			{
-				c->pre = temp;
-			}
-			else
-			{
-				Node_1 *root;
-				root = c->pre;
-				while (root->next != nullptr)
-				{
-					root = root->next;
-				}
-				root->next = temp;
-			}
-		}
-		else
-		{
-			cout << "NO password present" << endl;
-		}
-	}
-	read.close();
-}
-void  Hashtable::displayPasswords()
+void Hashtable::display()
 {
-	starthash();
-	Node *c = start;
-	while (c != nullptr)
-	{
-		Node_1 *c1 = c->pre;
-		while (c1 != nullptr)
-		{
-			cout<<c1->accountNumber<<endl;
-			cout<<c1->password<<endl<<endl;
-			c1 = c1->next;
-		}
-		c = c->next;
-	}
+    Node* current = start.get();
+    while (current != nullptr)
+    {
+        cout << current->data << endl;
+        current = current->next.get();
+    }
 }
-void  Hashtable:: delete_password(int accountno)
+
+void Hashtable::loadhashtable()
 {
-	ifstream read;
-	read.open("hashtable.txt");
-	vector <int> v;
-	int acc=0,pass=0;
-	int i = 0;
-	while (!read.eof())
-	{
-		i++;
-		read >> acc;
-		read >> pass;
-		if (acc == accountno)
-		{	                                           // read both account number and password to skip them
-			continue;
-		}
-		v.push_back(acc);
-		v.push_back(pass);
-	}
-	read.close();
-	ofstream write;
-	write.open("temp.txt", ios::app);
-	
-		for (int i = 0; i < v.size(); i++)
-		{
-			if (v[i] != 0)
-			{
-				write << v[i] << endl;
-			}
-		}
-	
-	
-	write.close();
-	remove("hashtable.txt");
-	rename("temp.txt", "hashtable.txt");
+    int acc = 0, r, pass;
+
+    ifstream read;
+    read.open("hashtable.txt");
+    while (!read.eof())
+    {
+
+        read >> acc;
+        read >> pass;
+        if (match(acc, pass))
+        {
+            continue;
+        }
+        if (acc != -858993460 && pass != -858993460)
+        {
+            r = acc % 10;
+
+            Node* c = start.get();
+            while (c->data != r)
+            {
+                c = c->next.get();
+            }
+            auto temp = make_unique<Node_1>(acc, pass);
+            if (c->pre == nullptr)
+            {
+                c->pre = move(temp);
+            }
+            else
+            {
+                Node_1* root = c->pre.get();
+                while (root->next != nullptr)
+                {
+                    root = root->next.get();
+                }
+                root->next = move(temp);
+            }
+        }
+        else
+        {
+            cout << "NO password present" << endl;
+        }
+    }
+    read.close();
 }
+
+void Hashtable::displayPasswords()
+{
+    starthash();
+    Node* c = start.get();
+    while (c != nullptr)
+    {
+        Node_1* c1 = c->pre.get();
+        while (c1 != nullptr)
