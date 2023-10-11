@@ -1,9 +1,9 @@
 #pragma once
 # include <iostream>
 # include <vector>
-using namespace std;
 # include <fstream>
 # include <string>
+using namespace std;
 class BST_Node 
 {
 public:
