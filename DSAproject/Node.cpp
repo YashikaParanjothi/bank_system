@@ -1,16 +1,9 @@
+# include "Node.h"
 
-# include"Node.h"
-
-Node::Node()
+Node::Node() : next(nullptr), pre(nullptr), data(0)
 {
-	//This is a bidirectional node which requires a pointer to both the next and previous node.
-	next = nullptr;
-	pre = nullptr;
-	data = 0;
 }
-Node::Node(int d)//Parameterized Constructor
+
+Node::Node(int d) : next(nullptr), pre(nullptr), data(d)
 {
-	next = nullptr;
-	pre = nullptr;
-	data = d;
 }
