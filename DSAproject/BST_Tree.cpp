@@ -258,72 +258,72 @@ void BST_Tree:: findMax(BST_Node* root)
 }
 void BST_Tree::load_Server()
 {
-	ifstream read;
-	read.open("server.txt", ios::app);
+    ifstream read;
+    read.open("server.txt", ios::app);
 
-	string name = "";
-	string adress = "";
-	int accountno = 0;
-	int password = 0;
-	int balance = 0;
-	//cin.ignore();
-	while (!read.eof())
-	{
-		
-		
-		
-		getline(read, name);
-		getline(read, adress);
-		read >> accountno;
-		read >> password;
-		read >> balance;
-		read.ignore();
-		read.ignore();
+    string name = "";
+    string address = "";
+    int accountno = 0;
+    int password = 0;
+    int balance = 0;
 
-		if (name!="" && adress != "" && accountno != 0 && password != 0 )
-		{
-			//cout << "enter hua" << endl;
-			BST_Node * temp = new BST_Node(name, adress, accountno, password, balance);
-			BST_Node * current = Root;
-			if (Root == nullptr)
-			{
+    while (read >> name >> ws && getline(read, address) >> accountno >> password >> balance)
+    {
+        if (isValidAccountData(name, address, accountno, password))
+        {
+            insertNode(name, address, accountno, password, balance);
+        }
+    }
 
-				Root = temp;
-			}
-			else
-			{
-				while (true)
-				{
-
-					if (accountno < current->account_number)
-					{
-						if (current->left == nullptr)
-						{
-							current->left = temp;
-							break;
-						}
-						current = current->left;
-					}
-
-					if (accountno > current->account_number)
-					{
-						if (current->right == nullptr)
-						{
-							current->right = temp;
-							break;
-						}
-						current = current->right;
-					}
-					if (accountno == current->account_number)
-					{
-						break;
-					}
-				}
-			}
-		}
-	}
-	read.close();
+    read.close();
 }
+
+bool BST_Tree::isValidAccountData(const string& name, const string& address, int accountno, int password)
+{
+    return (!name.empty() && !address.empty() && accountno != 0 && password != 0);
+}
+
+void BST_Tree::insertNode(const string& name, const string& address, int accountno, int password, int balance)
+{
+    BST_Node* temp = new BST_Node(name, address, accountno, password, balance);
+
+    if (Root == nullptr)
+    {
+        Root = temp;
+    }
+    else
+    {
+        insertNodeRecursive(Root, temp);
+    }
+}
+
+void BST_Tree::insertNodeRecursive(BST_Node* current, BST_Node* newNode)
+{
+    if (newNode->account_number < current->account_number)
+    {
+        if (current->left == nullptr)
+        {
+            current->left = newNode;
+        }
+        else
+        {
+            insertNodeRecursive(current->left, newNode);
+        }
+    }
+    else if (newNode->account_number > current->account_number)
+    {
+        if (current->right == nullptr)
+        {
+            current->right = newNode;
+        }
+        else
+        {
+            insertNodeRecursive(current->right, newNode);
+        }
+    }
+    // Ignore duplicates
+}
+
 void BST_Tree:: update_server(BST_Node *root)
 {
 	static int i = 0;
@@ -351,7 +351,7 @@ void BST_Tree:: update_server(BST_Node *root)
 BST_Node* BST_Tree:: search (BST_Node* root, int accountno)
 {
 	if (root == nullptr)
-		return (nullptr);
+		return nullptr;
 	else if (accountno < root->account_number)
 		return (search(root->left, accountno));
 	else if (accountno > root->account_number)
