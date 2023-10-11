@@ -7,7 +7,7 @@
 class Node
 {
 public:
-    explicit Node(int);  // Added "explicit" keyword
+    explicit Node(int); 
     Node *next;
     Node_1 *pre;
     int data;
