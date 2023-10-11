@@ -22,7 +22,8 @@ void admin()
 
         if (condition == 1)
         {
-            string name = "", address = "";
+            string name = "";
+            string address = "";
             int accountNumber;
             int password;
             int balance;
