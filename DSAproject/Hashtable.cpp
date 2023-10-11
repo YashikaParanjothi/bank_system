@@ -87,13 +87,12 @@ void Hashtable::display()
 
 void Hashtable::loadhashtable()
 {
-    int acc = 0, r, pass;
+    int acc, r, pass;
 
     ifstream read;
     read.open("hashtable.txt");
     while (!read.eof())
     {
-
         read >> acc;
         read >> pass;
         if (match(acc, pass))
@@ -103,25 +102,10 @@ void Hashtable::loadhashtable()
         if (acc != -858993460 && pass != -858993460)
         {
             r = acc % 10;
-
-            Node* c = start.get();
-            while (c->data != r)
+            Node* c = findNode(r);
+            if (c != nullptr)
             {
-                c = c->next.get();
-            }
-            auto temp = make_unique<Node_1>(acc, pass);
-            if (c->pre == nullptr)
-            {
-                c->pre = move(temp);
-            }
-            else
-            {
-                Node_1* root = c->pre.get();
-                while (root->next != nullptr)
-                {
-                    root = root->next.get();
-                }
-                root->next = move(temp);
+                addNodeToHashTable(c, acc, pass);
             }
         }
         else
@@ -140,3 +124,38 @@ void Hashtable::displayPasswords()
     {
         Node_1* c1 = c->pre.get();
         while (c1 != nullptr)
+        {
+            // Display passwords logic
+            c1 = c1->next.get();
+        }
+        c = c->next.get();
+    }
+}
+
+Node* Hashtable::findNode(int r)
+{
+    Node* c = start.get();
+    while (c != nullptr && c->data != r)
+    {
+        c = c->next.get();
+    }
+    return c;
+}
+
+void Hashtable::addNodeToHashTable(Node* c, int acc, int pass)
+{
+    auto temp = make_unique<Node_1>(acc, pass);
+    if (c->pre == nullptr)
+    {
+        c->pre = move(temp);
+    }
+    else
+    {
+        Node_1* root = c->pre.get();
+        while (root->next != nullptr)
+        {
+            root = root->next.get();
+        }
+        root->next = move(temp);
+    }
+}
