@@ -13,5 +13,5 @@ public:
     int data;
     
     Node();
-    Node(int);
+    explicit Node(int);
 };
