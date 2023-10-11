@@ -1,9 +1,7 @@
-
+#include <memory>
 # include "BST_Tree.h"
 # include "Hashtable.h"
-BST_Tree:: BST_Tree() {
 
-}
 void BST_Tree::add_Account(string name, string adress, int accountno, int password, int balance)
 {
     h.add(accountno, password);
@@ -11,53 +9,50 @@ void BST_Tree::add_Account(string name, string adress, int accountno, int passwo
     write.open("server.txt", ios::app);
     write << name << endl << adress << endl << accountno << endl << password << endl << balance << endl;
     write.close();
-    BST_Node* temp = new BST_Node(name, adress, accountno, password, balance);
+
+    std::unique_ptr<BST_Node> temp = std::make_unique<BST_Node>(name, adress, accountno, password, balance);
 
     BST_Node* current = Root;
     bool inserted = false;
 
     if (Root == nullptr)
     {
-        Root = temp;
+        Root = temp.release();
+        inserted = true;
     }
-    else
-    {
-        while (current != nullptr)
-        {
-            if (accountno < current->account_number)
-            {
-                if (current->left == nullptr)
-                {
-                    current->left = temp;
-                    inserted = true;
-                    break;
-                }
-                current = current->left;
-            }
-            else if (accountno > current->account_number)
-            {
-                if (current->right == nullptr)
-                {
-                    current->right = temp;
-                    inserted = true;
-                    break;
-                }
-                current = current->right;
-            }
-            else
-            {
-                // Duplicate account number, handle accordingly (e.g., update or reject)
-                break;
-            }
-        }
 
-        if (!inserted)
+    while (!inserted && current != nullptr)
+    {
+        if (accountno < current->account_number)
         {
-            // Handle the case where the node was not inserted
+            if (current->left == nullptr)
+            {
+                current->left = temp.release();
+                inserted = true;
+            }
+            current = current->left;
         }
+        else if (accountno > current->account_number)
+        {
+            if (current->right == nullptr)
+            {
+                current->right = temp.release();
+                inserted = true;
+            }
+            current = current->right;
+        }
+        else
+        {
+            // Duplicate account number, handle accordingly (e.g., update or reject)
+            inserted = true; // Node not inserted, but considered as inserted to exit the loop
+        }
+    }
+
+    if (!inserted)
+    {
+        // Handle the case where the node was not inserted
     }
 }
-
 
 
 BST_Node* BST_Tree::delete_Account(BST_Node* root, int accountno)
