@@ -2,8 +2,7 @@
 # include <iostream>
 # include <vector>
 # include <fstream>
-# include <string>
-using namespace std; 
+# include <string> 
 class BST_Node 
 {
 public:
