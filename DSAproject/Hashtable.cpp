@@ -6,11 +6,6 @@
 
 using namespace std;
 
-Hashtable::Hashtable()
-{
-    start = nullptr;
-}
-
 void Hashtable::starthash()
 {
     for (int i = 0; i < 12; i++)
@@ -87,7 +82,9 @@ void Hashtable::display()
 
 void Hashtable::loadhashtable()
 {
-    int acc, r, pass;
+    int acc;
+    int r;
+    int pass;
 
     ifstream read;
     read.open("hashtable.txt");
