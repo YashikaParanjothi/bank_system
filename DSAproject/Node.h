@@ -1,9 +1,9 @@
 #pragma once
 # include <iostream>
-using namespace std;
 # include <fstream>
 # include <string>
 # include "Node_1.h"
+using namespace std;
 class Node
 {
 public:
