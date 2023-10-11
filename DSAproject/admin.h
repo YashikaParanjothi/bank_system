@@ -23,7 +23,9 @@ void admin()
         if (condition == 1)
         {
             string name = "", address = "";
-            int accountNumber, password, balance;
+            int accountNumber;
+            int password;
+            int balance;
             cout << "enter name" << endl;
             cin >> name;
             cout << "enter address" << endl;
