@@ -15,7 +15,7 @@ void boot()
 }
 int main()
 {
-	void boot();
+	boot();
 
 	int condition=0;
 	while (condition != 4)
@@ -31,7 +31,7 @@ int main()
 		}
 		if (condition == 2)
 		{
-
+			staff();
 		}
 		if (condition == 3)
 		{
