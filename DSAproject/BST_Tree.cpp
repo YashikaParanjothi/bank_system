@@ -43,8 +43,7 @@ void BST_Tree::add_Account(string name, string adress, int accountno, int passwo
         }
         else
         {
-            // Duplicate account number, handle accordingly (e.g., update or reject)
-            inserted = true; // Node not inserted, but considered as inserted to exit the loop
+            inserted = true;
         }
     }
 
